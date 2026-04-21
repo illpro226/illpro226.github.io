@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Axiom | Spectre</title>
+  <meta name="description" content="Axiom | Spectre — systems, security, software, and digital infrastructure by Michael Neil." />
+  <style>
+    :root {
+      --bg: #06070a;
+      --bg-soft: #0c1014;
+      --panel: rgba(12, 16, 20, 0.82);
+      --panel-strong: rgba(15, 21, 27, 0.95);
+      --text: #e7f7ea;
+      --muted: #94a79a;
+      --line: rgba(140, 255, 163, 0.16);
+      --glow: #8cff8a;
+      --glow-2: #53ff71;
+      --accent: #b7ff00;
+      --danger: #ff4d6d;
+      --shadow: 0 0 30px rgba(140, 255, 138, 0.12);
+      --radius: 20px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(140, 255, 138, 0.14), transparent 28%),
+        radial-gradient(circle at top right, rgba(183, 255, 0, 0.1), transparent 24%),
+        linear-gradient(180deg, #050608 0%, #090c10 45%, #050608 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(140, 255, 138, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140, 255, 138, 0.03) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.08));
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wrap {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(6, 7, 10, 0.68);
+      border-bottom: 1px solid rgba(140, 255, 138, 0.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 72px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #0a0f0b;
+      background: linear-gradient(135deg, var(--accent), var(--glow-2));
+      box-shadow: 0 0 22px rgba(183, 255, 0, 0.35);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .brand-text strong {
+      font-size: 0.95rem;
+    }
+
+    .brand-text span {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(183, 255, 0, 0.24);
+      background: rgba(183, 255, 0, 0.08);
+      color: #f3ffcf;
+    }
+
+    .hero {
+      padding: 84px 0 42px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .panel {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-copy {
+      padding: 34px;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(140, 255, 138, 0.18);
+      background: rgba(140, 255, 138, 0.05);
+      color: #d8ffe1;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+    }
+
+    h1 {
+      margin: 20px 0 16px;
+      font-size: clamp(2.6rem, 6vw, 5.6rem);
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+    }
+
+    h1 .glow {
+      display: block;
+      color: var(--accent);
+      text-shadow: 0 0 28px rgba(183, 255, 0, 0.18);
+    }
+
+    .lead {
+      max-width: 700px;
+      color: var(--muted);
+      font-size: 1.06rem;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), var(--glow-2));
+      color: #081007;
+      font-weight: 700;
+      box-shadow: 0 0 24px rgba(140, 255, 138, 0.24);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.02);
+      border-color: rgba(140, 255, 138, 0.14);
+      color: var(--text);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(140, 255, 138, 0.08);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.25rem;
+      color: #f2ffe9;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero-side {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 520px;
+      background:
+        radial-gradient(circle at 70% 10%, rgba(183, 255, 0, 0.12), transparent 24%),
+        rgba(11, 15, 19, 0.86);
+    }
+
+    .terminal {
+      flex: 1;
+      border-radius: 18px;
+      border: 1px solid rgba(140, 255, 138, 0.14);
+      background: linear-gradient(180deg, rgba(10, 15, 14, 0.98), rgba(7, 10, 12, 0.96));
+      padding: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .terminal::before {
+      content: "SYSTEM STATUS";
+      display: block;
+      color: rgba(231, 247, 234, 0.45);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      margin-bottom: 12px;
+    }
+
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #d9ffe3;
+    }
+
+    .code .muted { color: #7f9685; }
+    .code .ok { color: #99ff9f; }
+    .code .warn { color: #f7ff7c; }
+    .code .accent { color: #c4ff33; }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(140, 255, 138, 0.08);
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.92rem;
+    }
+
+    section {
+      padding: 22px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 560px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 22px;
+      border-radius: 20px;
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .card .tag {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(140, 255, 138, 0.14);
+      color: #d7ffe0;
+      background: rgba(140, 255, 138, 0.05);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #d6ead8;
+      line-height: 1.8;
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .project {
+      padding: 24px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(13, 18, 22, 0.96), rgba(9, 13, 17, 0.96));
+      box-shadow: var(--shadow);
+    }
+
+    .project h3 {
+      margin: 0 0 10px;
+      font-size: 1.3rem;
+    }
+
+    .project p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .project-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #e3f3e5;
+      font-size: 0.95rem;
+    }
+
+    .project-footer span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .contact {
+      margin: 18px 0 56px;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid rgba(183, 255, 0, 0.18);
+      background: linear-gradient(135deg, rgba(183, 255, 0, 0.09), rgba(140, 255, 138, 0.03));
+      box-shadow: 0 0 30px rgba(183, 255, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .contact h2 {
+      margin: 0 0 8px;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+    }
+
+    .contact p {
+      margin: 0;
+      color: rgba(231, 247, 234, 0.82);
+      line-height: 1.7;
+      max-width: 720px;
+    }
+
+    footer {
+      padding: 0 0 36px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(140, 255, 138, 0.08);
+      padding-top: 18px;
+    }
+
+    .signature {
+      color: #dfff9e;
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .cards,
+      .projects {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-grid,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        min-height: auto;
+        padding: 14px 0;
+        flex-wrap: wrap;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+      }
+
+      .hero-copy,
+      .hero-side {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#top">
+        <div class="brand-mark">A|S</div>
+        <div class="brand-text">
+          <strong>Axiom | Spectre</strong>
+          <span>Systems · Security · Software</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <a class="nav-cta" href="https://github.com/illpro226" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="panel hero-copy">
+          <div class="eyebrow">Independent builder · infrastructure-minded · brand-forward</div>
+          <h1>
+            Building sharp systems<br />
+            <span class="glow">with a hacker-grade edge.</span>
+          </h1>
+          <p class="lead">
+            Michael Neil creates software, network tooling, automation, and digital experiences that blend clean engineering, strong visual identity, and practical real-world utility. This site now reflects the Axiom | Spectre direction: dark, precise, and built with intent.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#projects">View Projects</a>
+            <a class="button secondary" href="https://github.com/illpro226" target="_blank" rel="noreferrer">Open GitHub Profile</a>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <strong>Security-first</strong>
+              <span>Infrastructure, diagnostics, and controlled deployments.</span>
+            </div>
+            <div class="stat">
+              <strong>Design-aware</strong>
+              <span>Brand systems with a bold cyber-industrial visual language.</span>
+            </div>
+            <div class="stat">
+              <strong>Builder mindset</strong>
+              <span>From concept to working tool, with the rough edges removed.</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel hero-side">
+          <div class="terminal">
+            <div class="code" id="terminalText">
+              <div><span class="muted">&gt;</span> identity.load(<span class="accent">"axiom_spectre"</span>)</div>
+              <div><span class="ok">[ok]</span> core profile initialized</div>
+              <div><span class="muted">&gt;</span> focus.scan()</div>
+              <div><span class="ok">[ok]</span> software systems</div>
+              <div><span class="ok">[ok]</span> network tooling</div>
+              <div><span class="ok">[ok]</span> diagnostics and automation</div>
+              <div><span class="ok">[ok]</span> cyberpunk brand execution</div>
+              <div><span class="muted">&gt;</span> status.report()</div>
+              <div><span class="warn">[live]</span> building distinctive things that actually work</div>
+            </div>
+          </div>
+          <div class="mini-grid">
+            <div class="mini-card">
+              <h3>Operating Style</h3>
+              <p>Direct execution, clean structure, strong visuals, and practical systems thinking.</p>
+            </div>
+            <div class="mini-card">
+              <h3>Visual Direction</h3>
+              <p>Black and charcoal base, lime-green signal accents, neon glow restraint, and precise layouts.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="capabilities">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Capabilities</h2>
+          </div>
+          <p>
+            The work spans technical infrastructure, product thinking, UI direction, and operational tooling. The goal is not just shipping features. It is building systems that feel intentional and hold up under real use.
+          </p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <span class="tag">Infrastructure</span>
+            <h3>Homelab and service architecture</h3>
+            <p>Server layout, network services, reverse proxy patterns, VPN and DNS strategy, and service orchestration built for clarity and reliability.</p>
+            <ul>
+              <li>Deployment planning</li>
+              <li>Network service design</li>
+              <li>Operational troubleshooting</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="tag">Software</span>
+            <h3>Custom tools and product systems</h3>
+            <p>Purpose-built applications, utility software, internal workflows, dashboards, and web experiences aimed at real needs instead of generic filler.</p>
+            <ul>
+              <li>Python and automation workflows</li>
+              <li>Web interfaces and dashboards</li>
+              <li>Structured project systems</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="tag">Brand</span>
+            <h3>Technical identity with edge</h3>
+            <p>Design language that feels modern, cinematic, and unmistakable without getting in the way of functionality.</p>
+            <ul>
+              <li>Axiom | Spectre styling</li>
+              <li>Dark UI systems</li>
+              <li>Cohesive visual direction</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Active Direction</h2>
+          </div>
+          <p>
+            Current efforts center around diagnostics, infrastructure visibility, custom interfaces, and projects that turn complex systems into something cleaner and more controllable.
+          </p>
+        </div>
+        <div class="projects">
+          <article class="project">
+            <h3>FixPoint</h3>
+            <p>A diagnostics and comparison platform aimed at showing what a system should be doing, what it is actually doing, and why the difference exists.</p>
+            <div class="project-footer">
+              <small>Diagnostics · observability · system truth</small>
+              <span>Live project</span>
+            </div>
+          </article>
+          <article class="project">
+            <h3>Data Extremes / Portal Work</h3>
+            <p>Cyber-industrial portals, dashboards, and branded interfaces that turn infrastructure and services into something readable, controlled, and visually sharp.</p>
+            <div class="project-footer">
+              <small>UI systems · portal design · service visibility</small>
+              <span>In development</span>
+            </div>
+          </article>
+          <article class="project">
+            <h3>PacketWatch / Network Tooling</h3>
+            <p>Network-focused utilities and monitoring ideas built around visibility, alerts, and practical workflows rather than noise.</p>
+            <div class="project-footer">
+              <small>Traffic insight · alerts · utility design</small>
+              <span>Planned expansion</span>
+            </div>
+          </article>
+          <article class="project">
+            <h3>Creative Technical Experiments</h3>
+            <p>Custom light control, retro-inspired systems, branded interfaces, and side builds that merge engineering with strong identity.</p>
+            <div class="project-footer">
+              <small>Hardware control · interfaces · experimentation</small>
+              <span>Ongoing</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="contact" id="contact">
+          <div>
+            <h2>Want the code, the build, or the system view?</h2>
+            <p>
+              The GitHub profile is the clearest live index for public work. More sections can be added here later for project cards, writeups, contact links, or a full Data Extremes landing experience.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/illpro226" target="_blank" rel="noreferrer">Go to GitHub</a>
+            <a class="button secondary" href="mailto:hello@axiomspectre.dev">Contact</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <div>© <span id="year"></span> Michael Neil. Built for GitHub Pages.</div>
+      <div class="signature">Axiom | Spectre</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const lines = [
+      '> identity.load("axiom_spectre")',
+      '[ok] brand signature aligned',
+      '> stack.query()',
+      '[ok] systems + software + infrastructure',
+      '[ok] security-aware execution',
+      '[ok] visual direction locked',
+      '> next_action()',
+      '[live] ship work that feels sharp and solid'
+    ];
+
+    const target = document.getElementById('terminalText');
+    let i = 0;
+
+    setInterval(() => {
+      i = (i + 1) % lines.length;
+      const html = lines
+        .slice(i)
+        .concat(lines.slice(0, i))
+        .map((line) => {
+          if (line.startsWith('[ok]')) return '<div><span class="ok">[ok]</span> ' + line.replace('[ok] ', '') + '</div>';
+          if (line.startsWith('[live]')) return '<div><span class="warn">[live]</span> ' + line.replace('[live] ', '') + '</div>';
+          return '<div><span class="muted">&gt;</span> ' + line.replace('> ', '') + '</div>';
+        })
+        .join('');
+      target.innerHTML = html;
+    }, 2200);
+  </script>
+</body>
+</html>
